@@ -71,40 +71,58 @@ namespace memoryPool{
 			return nullptr;
 		}
 
-		if(_allocatorArr[_allocatorNum - 1]._memSize < memSize){
-			return nullptr;
-		}
-
 		int left = 0;
 		int right = _allocatorNum;
 		int mid = (left + right) / 2;
 
-		for(;;){
+		while(left < right){
 			
-			stAllocator* midAllocator = &_allocatorArr[mid];
+			int allocatorMemSize = _allocatorArr[mid]._memSize;
 
-			if(right - left <= 1){
-				
-				if(midAllocator->_memSize >= memSize){
-					return midAllocator;
-				} else {
-					return &_allocatorArr[right];
+			if (allocatorMemSize == memSize) {
+				if (memSize * 1.5 < allocatorMemSize) {
+					return nullptr;
 				}
+				return &_allocatorArr[mid];
 			}
 
-			if(midAllocator->_memSize == memSize){
-				return midAllocator;
-			}
-
-			if(midAllocator->_memSize > memSize){
+			if(allocatorMemSize > memSize){
 				right = mid;
 			} else {
-				left = mid;
+				left = mid + 1;
 			}
-
+			
 			mid = (left + right) / 2;
 
+		}
 
+		if (mid == _allocatorNum) {
+			return nullptr;
+		}
+
+		stAllocator* midAllocator = &_allocatorArr[mid];
+		int midAllocatorMemSize = midAllocator->_memSize;
+
+		if (midAllocatorMemSize >= memSize) {
+
+			if (memSize * 1.5 < midAllocatorMemSize) {
+				return nullptr;
+			}
+
+			return midAllocator;
+		}
+
+		if (midAllocatorMemSize < memSize) {
+
+			if (memSize * 1.5 < midAllocatorMemSize) {
+				return nullptr;
+			}
+
+			if (mid + 1 == _allocatorNum) {
+				return nullptr;
+			}
+
+			return &_allocatorArr[mid + 1];
 		}
 
 		return nullptr;
