@@ -102,8 +102,6 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
-[Ll]ogs/
 objectFile/
 objectFiles/
 objFile/
@@ -440,5 +438,5 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/windows,c++,visualstudio
 
 
-
+*.txt
 *.dmp
